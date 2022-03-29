@@ -31,7 +31,7 @@ You can find the analysis [here](https://github.com/JunyouC/R_Proficiency_Demons
 </br>**5. Sentiment analysis of lyrics**
 <br/>**brief intro**: I did frequency, sentiment and worldcloud analysis to analyze lyrics of the top 10 most popular songs and top 100 most popular songs on Spotify (yes I did them two times using different methods to extract the data). 
 <br/>
-<br/> *It should be noted that I used APIkey in R wrapper. Therefore the Rcode is only reproducible when you entered your APIkey. To get the API key you can start a account here at [musixmach](https://developer.musixmatch.com/).*:wink:
+<br/>:boom:*It should be noted that I used APIkey in R wrapper. Therefore the Rcode is only reproducible when you entered your APIkey. To get the API key you can start a account here at [musixmach](https://developer.musixmatch.com/).*:wink:
 
 ## 3. Web Scraping
 You can find the analysis [here](https://github.com/JunyouC/R_Proficiency_Demonstration-me/tree/main/webscraping).
@@ -41,5 +41,5 @@ You can find the analysis [here](https://github.com/JunyouC/R_Proficiency_Demons
 </br>**2. Web scraping**
 </br>**3. Geting data using API**
 <br/>**brief intro**: In this part, I mainly practiced how to use Webscrape and API to scrape informations from websites. 
-<br/> *It should be noted that I used APIkey in when extracting data using API. Therefore the Rcode is only reproducible when you entered your APIkey. To get the API key you can start a account here at [ Jet Propulsion Laboratory ](https://ssd-api.jpl.nasa.gov/doc/cad.html).*:wink:
+<br/> :boom:*It should be noted that I used APIkey in when extracting data using API. Therefore the Rcode is only reproducible when you entered your APIkey. To get the API key you can start a account here at [ Jet Propulsion Laboratory ](https://ssd-api.jpl.nasa.gov/doc/cad.html).*
 
