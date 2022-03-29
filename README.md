@@ -40,5 +40,6 @@ You can find the analysis [here](https://github.com/JunyouC/R_Proficiency_Demons
 </br>**2. Web scraping**
 </br>**3. Geting data using API**
 <br/>**brief intro**: In this part, I mainly practiced how to use Webscrape and API to scrape informations from websites. 
+<br/>
 <br/> :boom:*It should be noted that I used APIkey in when extracting data using API. Therefore the Rcode is only reproducible when you entered your APIkey. To get the API key you can start a account here at [ Jet Propulsion Laboratory ](https://ssd-api.jpl.nasa.gov/doc/cad.html).*
 
