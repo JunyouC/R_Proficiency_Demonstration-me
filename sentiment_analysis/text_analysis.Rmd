@@ -1,0 +1,254 @@
+---
+title: "Text Analysis"
+author: "Junyou Chen"
+date: "3/15/2022"
+output: 
+  github_document:
+    toc: true
+    toc_depth: 5
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE, set.seed(100), warning = FALSE, message = FALSE)
+## install rmusix from github
+library(tidyverse)
+library(knitr)
+library(rvest)
+library(tidytext)
+library(readr)
+library(devtools)
+library(here)
+install_github("fernandabruno/musixmatchR")
+library(musixmatchR)
+library(base)
+library(evaluate)
+library(tm)
+library(ggwordcloud)
+
+## create a new profile to store API key information 
+usethis::edit_r_profile(scope = "project")
+```
+
+# Text Analysis of Lyrics of Most Popular Songs
+In this analysis, I used two different ways to extract lyrics from [Musixmatch](https://developer.musixmatch.com/) to do text analysis. 
+</br>I used the first method only to extract data for the top ten most popular songs and the second to extract data for as much as 100 top popular songs.
+The analysis I did include: 
+</br>**1. Finding the most Frequent words appeared in lyrics** 
+</br>**2. Worldcloud**
+</br>**3. Sentiment analysis of lyrics**
+
+## Part 1: Text Analysis of the Top Ten Songs 
+In this part I used [R wrapper](https://github.com/fernandabruno/musixmatchR) developed by fernandabruno to extract data from Musixmatch for the recent 10 most popular songs and binded them together forming a new table. 
+*It should be noted that as I do not have full access to the musixmatch API, I can only extract the 30% of lyrics for each song.*
+```{r data_table1}
+## set API-key
+key <- getOption("musixmatch")
+
+## create a function to extract lyrics with proper name for singer and song 
+lyrics_extract <- function(singer, song){
+  song <- searchTrack(singer, song, key) %>%
+    filter(track_has_lyrics == 1) 
+  ##only select songs with lyrics
+  song_id <- song[[1]][1] ##extract song_id
+  lyrics <- getLyrics(song_id, key) 
+  clean_lyrics <- gsub('.{70}$', '', lyrics$lyrics_body)## to clean the data
+  return(as.tibble(clean_lyrics))
+}
+## extract lyrics for 10 most popular songs on spotify
+song_1 <- lyrics_extract("Ed Sheeran","Shape of You")
+song_2 <- lyrics_extract("The Weeknd","Blinding Lights")
+song_3 <- lyrics_extract("Tones and I","Dance Monkey")
+song_4 <- lyrics_extract("Post Malone", "Rockstar")
+song_5 <- lyrics_extract("Lewis Capaldi", "Someone You Loved")
+song_6 <- lyrics_extract("The Chainsmokers","Closer")
+song_7 <- lyrics_extract("Post Malone","Sunflower")
+song_8 <- lyrics_extract("Shawn Mendes", "Señorita")
+song_9 <- lyrics_extract("Imagine Dragons", "Believer")
+song_10 <- lyrics_extract("Billie Eilish", "Bad Guy")
+
+lyrics_total <- bind_rows(song_1, song_2, song_3, song_4, song_5, song_6, song_7, song_8, song_9, song_10) 
+
+kable(head(lyrics_total))
+```
+
+### 1.1 Most frequent words 10 most popular songs in 2022
+In this part, I tokenized lyrics to find the most frequent words appeared in 10 most popular songs in 2022. As we can see from the result, the most frequently used top three words respectively are **oh, la, like**. 
+```{r frequency1}
+ ## tokenize
+lyrics_unigrams <- unnest_tokens(
+  tbl = lyrics_total,
+  output = word,
+  input = value)
+## remove stop words
+lyrics_unigrams$word_less<-removeWords(lyrics_unigrams$word,stopwords(c("","en")))
+
+## What are most appeared word? 
+word_counts <- lyrics_unigrams %>% 
+    count(word_less) %>% 
+  filter(n < 200) %>%
+    arrange(desc(n)) %>%
+    slice_max(order_by = n, n = 15) %>%
+  # create barplot
+    ggplot(aes(x = reorder(word_less, n), y = n)) +
+    geom_col(fill = "steelblue") +
+    scale_x_reordered() +
+    labs(
+      title = "Most frequent words 10 most popular songs in 2022",
+      x = NULL,
+      y = "Word count"
+  ) +
+  coord_flip() +
+  theme_light()
+word_counts
+```
+
+
+### 1.2 Sentimental words used in 10 most Popular songs in 2022
+If we further investigate the sentiment tendency of the top 10 songs, we can notice that **like** ranked the first. three out of five  words are positive. 
+```{r sentiment1}
+# Generate data frame with sentiment derived from the Bing dictionary
+music_bing <- lyrics_unigrams %>%
+  inner_join(get_sentiments("bing"), by = "word")
+music_bing %>%
+  group_by(sentiment) %>%
+  count(word) %>%
+  arrange(-n) %>%
+  head(5) %>%
+  # generate the bar plot
+  ggplot(aes(x = reorder(word, n), n, fill = sentiment)) +
+  geom_col() +
+  labs(
+    title = "Sentimental words used in 10 most Popular songs in 2021",
+    x = NULL,
+    y = "Number of occurences"
+  ) +
+  coord_flip()
+```
+
+## Part 2: Text Analysis of the Top 100 Songs 
+
+
+However, as we can notice, 10 songs in far from enough to do text analysis and not representative enough. 
+</br> Therefore, I download a [csv.file](https://github.com/JunyouC/hw09/blob/main/songs.csv) including song names and singers of the most recent top 100 popular songs to do the analysis. 
+
+```{r data_table2}
+song100 <- read_csv(here("songs.csv"))
+## delete "" in name column
+song100$name <- substring(song100$name,2) 
+song100$name <- substr(song100$name,1,nchar(song100$name)-1)
+kable(head(song100))
+```
+
+### 2.1 Iterating Function
+In this part, I wrote a function that would return automatically a tableframe with all informations of the song including lyrics once you input name of the song and singer. 
+Then I iterate the cleaned [csv.file](https://github.com/JunyouC/hw09/blob/main/songs.csv) using the function i've created and map2_dfr to create a dataframe to store informations for all 100 songs.  
+The table below only exhibited the first 2 rows of the full table. 
+```{r extract_data2}
+## create a function that would return more infos.
+lyrics_extract2 <- function(song, singer){
+  song <- searchTrack(singer, song, key) %>%
+    filter(track_has_lyrics == 1) 
+  ##only select songs with lyrics
+  song_id <- song[[1]][1] ##extract song_id
+  lyrics <- getLyrics(song_id, key) 
+  lyrics$lyrics_body <- gsub('.{58}$', '', lyrics$lyrics_body)## to clean the data
+  song_tb <- inner_join(song, lyrics, by = "track_id") %>%
+    select(-c(track_rating,track_has_lyrics,track_numfavourite,explicit.x,explicit.y))
+  return(song_tb)
+}
+
+## Map over multiple inputs simultaneously.
+songs100<-song100 %>%
+  filter(rank != 6) %>%
+  filter(rank <= 100) %>%
+  select(-rank)
+
+full_table<- map2_dfr(songs100$name, songs100$singer, lyrics_extract2)
+
+kable(head(full_table,2))
+
+```
+### 2.2 Most frequent words 100 most popular songs in 2022
+In this part, I tokenized lyrics to find the most frequent words appeared in 10 most popular songs in 2022. As we can see from the result, the most frequently used top three words respectively are **oh, la, like**. 
+As we can see from the graph, as we elevate the number of total song, the results become also more representative than before in terms of number. the most frequently used top three words become **yeah, like, know**, instead of **oh, la, like**. It is worth noting that **like** up ranked one row.  
+```{r frequency2}
+## tokenize
+lyrics_unigrams2 <- unnest_tokens(
+  tbl = full_table,
+  output = word,
+  input = lyrics_body) 
+lyrics_unigrams2$word_less<-removeWords(lyrics_unigrams2$word,stopwords(c("","en"))) ## remove stop words 
+  
+
+## What are most appeared word? 
+word_counts2 <- lyrics_unigrams2 %>% 
+    count(word_less) %>% 
+    arrange(desc(n)) %>%
+    slice_max(order_by = n, n = 15) %>%
+    filter(n < 1000) %>%
+  # create barplot
+    ggplot(aes(x = reorder(word_less, n), y = n)) +
+    geom_col(fill = "steelblue") +
+    scale_x_reordered() +
+    labs(
+      title = "Most frequent words 100 most popular songs in 2022",
+      x = NULL,
+      y = "Word count"
+  ) +
+  coord_flip() +
+  theme_light()
+word_counts2
+
+```
+
+
+### 2.3 Create a Wordcloud
+A worldcloud can be created to better demonstrate the most frequent words appeared in 100 most popular songs in 2021. 
+As we can see, people really like onomatopoeia words like **oh**, **yeah**, and they also love words that are associated with emotions, particular positive ones like **like**,**love**. 
+```{r}
+
+set.seed(100)
+lyrics_unigrams2 %>%
+  drop_na(word_less) %>%
+  count(word_less) %>%
+  # keep top 100 words
+  slice_max(order_by = n, n = 100) %>%
+  mutate(angle = 45 * sample(c(0, 1), n(), replace = TRUE, prob = c(80, 20))) %>%
+  ggplot(aes(label = word_less, size = n, color = angle)) +
+  geom_text_wordcloud(rm_outside = TRUE) +
+  scale_size_area(max_size = 90) +
+  ggtitle("Most frequent tokens for 100 Most Popular Songs in 2021") +
+  theme_minimal()
+
+
+```
+
+### 2.4 Sentimental words used in 10 most Popular songs in 2022
+
+The sentiment analysis also becomes more representative as we elevate the number of total song from 10 to 100. 
+</br>**Like** still ranked first, followed by **love**, **good**.
+seven out of ten words are positive. 
+
+```{r sentiment2}
+# Generate data frame with sentiment derived from the Bing dictionary
+music_bing2 <- lyrics_unigrams2 %>%
+  inner_join(get_sentiments("bing"), by = "word")
+music_bing2 %>%
+  group_by(sentiment) %>%
+  count(word) %>%
+  arrange(-n) %>%
+  head(10) %>%
+  # generate the bar plot
+  ggplot(aes(x = reorder(word, n), n, fill = sentiment)) +
+  geom_col() +
+  labs(
+    title = "Sentimental words used in 100 most Popular songs in 2021",
+    x = NULL,
+    y = "Number of occurences"
+  ) +
+  coord_flip()
+```
+
+</br>
+*it should be restated that text analysis made above are based on only 30% of full lyrics of each as I have no full access to Musixmatch (no money!). However, if you are rich enough to subscribe Musixmatch, you can do full lyrics analysis since all my codes are reproducible (not without your personal Musixmatch API)*.
