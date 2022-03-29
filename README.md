@@ -1,6 +1,10 @@
 # R Proficiency Demonstration
 **This repository is designed for any professors, potential employers who would like to know more about my R proficiency capacity!**:bowtie:
 <br/>I am currently looking for RA opportunities in behavioral Science field(I am also open for public policy and social work field), please reach out to me if you are interested!:thumbsup:
+contact me at:
+junyou@uchicago.edu
+or
+junyou_chen3@163.com
 
 ## General Introductions 
 I have added hyperlink for all three analysis I've done before, you can click each one of them and it will bring you to the corresponding Github Link. 
