@@ -4,13 +4,12 @@
 
 ## General Introductions 
 I have added hyperlink for all three analysis I've done before, you can click each one of them and it will bring you to the corresponding Github Link. 
-<br/>In each repository, there is one **readme.md** file where you can find the basic introduction of the analysis, additional notes and perhaps some of my reflections *(I reckon this part also important as it helps me reflect my codes everytime)* !
-<br/>You may also find datasets that are used in the analysis. As my codes are reproducible, you can download the dataset or clone the repository to try it yourself as well *(isn't that amazing the preproducibility)* !
+<br/>1. In each repository, there is one **readme.md** file where you can find the basic introduction of the analysis, additional notes and perhaps some of my reflections *(I reckon this part also important as it helps me reflect my codes everytime)* !
+<br/>2. You may also find datasets that are used in the analysis. As my codes are reproducible, you can download the dataset or clone the repository to try it yourself as well *(isn't that amazing the preproducibility)* !
 :satisfied:
-
-<br/>For the analysis part, there is a **.Rmd file** and **.md file**. You can retrieve all of my raw codes in **.Rmd file** while you can see the full output report of analysis in **.md file**. 
-<br/>Some repository included image files where all rendered images are stored. 
-<br/>You can ignore files like .github, .gitignore, .Proj.
+<br/>3. For the analysis part, there is a **.Rmd file** and **.md file**. You can retrieve all of my raw codes in **.Rmd file** while you can see the full output report of analysis in **.md file**. 
+<br/>4. Some repository included image files where all rendered images are stored. 
+<br/>5. You can ignore files like **.github, .gitignore, .Proj**.
 
 
 ## 1. Domestic Violence Analysis
