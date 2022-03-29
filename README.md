@@ -6,7 +6,7 @@
 I have added hyperlink for all three analysis I've done before, you can click each one of them and it will bring you to the corresponding Github Link. 
 <br/>In each repository, there is one **readme.md** file where you can find the basic introduction of the analysis, additional notes and perhaps some of my reflections *(I reckon this part also important as it helps me reflect my codes everytime)* !
 <br/>You may also find datasets that are used in the analysis. As my codes are reproducible, you can download the dataset or clone the repository to try it yourself as well *(isn't that amazing the preproducibility)* !
-![amazed](~/R_Proficiency_Demostration_me/images/amazed.png)
+:satisfied:
 
 <br/>For the analysis part, there is a **.Rmd file** and **.md file**. You can retrieve all of my raw codes in **.Rmd file** while you can see the full output report of analysis in **.md file**. 
 <br/>Some repository included image files where all rendered images are stored. 
@@ -31,7 +31,7 @@ You can find the analysis [here](https://github.com/JunyouC/R_Proficiency_Demons
 </br>**5. Sentiment analysis of lyrics**
 <br/>**brief intro**: I did frequency, sentiment and worldcloud analysis to analyze lyrics of the top 10 most popular songs and top 100 most popular songs on Spotify (yes I did them two times using different methods to extract the data). 
 <br/>
-<br/> *It should be noted that I used APIkey in R wrapper. Therefore the Rcode is only reproducible when you entered your APIkey. To get the API key you can start a account here at [musixmach](https://developer.musixmatch.com/).*
+<br/> *It should be noted that I used APIkey in R wrapper. Therefore the Rcode is only reproducible when you entered your APIkey. To get the API key you can start a account here at [musixmach](https://developer.musixmatch.com/).*:wink:
 
 ## 3. Web Scraping
 You can find the analysis [here](https://github.com/JunyouC/R_Proficiency_Demonstration-me/tree/main/webscraping).
@@ -41,5 +41,5 @@ You can find the analysis [here](https://github.com/JunyouC/R_Proficiency_Demons
 </br>**2. Web scraping**
 </br>**3. Geting data using API**
 <br/>**brief intro**: In this part, I mainly practiced how to use Webscrape and API to scrape informations from websites. 
-<br/> *It should be noted that I used APIkey in when extracting data using API. Therefore the Rcode is only reproducible when you entered your APIkey. To get the API key you can start a account here at [ Jet Propulsion Laboratory ](https://ssd-api.jpl.nasa.gov/doc/cad.html).*
+<br/> *It should be noted that I used APIkey in when extracting data using API. Therefore the Rcode is only reproducible when you entered your APIkey. To get the API key you can start a account here at [ Jet Propulsion Laboratory ](https://ssd-api.jpl.nasa.gov/doc/cad.html).*:wink:
 
