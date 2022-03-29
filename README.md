@@ -9,7 +9,7 @@ I have added hyperlink for all three analysis I've done before, you can click ea
 :satisfied:
 <br/>3. For the analysis part, there is a **.Rmd file** and **.md file**. You can retrieve all of my raw codes in **.Rmd file** while you can see the full output report of analysis in **.md file**. 
 <br/>4. Some repository included image files where all rendered images are stored. 
-<br/>5. You can ignore files like **.github, .gitignore, .Proj**.
+<br/>5. You can ignore files like **.github, .gitignore, .Proj, .DS_Store**.
 
 
 ## 1. Domestic Violence Analysis
