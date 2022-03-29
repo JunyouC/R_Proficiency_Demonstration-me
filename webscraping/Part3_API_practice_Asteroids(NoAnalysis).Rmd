@@ -1,0 +1,70 @@
+---
+title: "Part2_Asteroids_Movie"
+author: "Junyou Chen"
+date: "3/9/2022"
+output: 
+  github_document:
+    toc: true
+    toc_depth: 2
+---
+## Required Packages
+```{r setup, message = FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+
+library(tidyverse)
+library(knitr)
+library(httr)
+library(jsonlite)
+library(base)
+
+```
+
+## Asteroids Near Earth
+In this part, I tried to practice API query to request information from the website. 
+I get data for Asteroids near earth from [Jet Propulsion Laboratory](https://www.jpl.nasa.gov/) by practicing API and unnested the data using `unnest_longer()` and `unnest()`.
+[Here](https://ssd-api.jpl.nasa.gov/doc/cad.html) is where I get the API.
+The table below only showed the first 6 rows of data. 
+```{r}
+## retrieve the data
+
+asteroid_api <- function(start, end) {
+  # send GET request
+  link <- sprintf("https://ssd-api.jpl.nasa.gov/cad.api?date-min=%s&date-max=%s", start, end)
+  response <- GET(
+    url = link
+  )
+  # parse response to JSON
+  response_df <- content(response)
+
+  return(response_df)
+}
+## to extract asteroid near earth data from 2020-01-01 to 2021-01-01.
+data <- asteroid_api("2020-01-01", "2021-01-01")
+## to first store data$data in a dataframe 
+data_df <- tibble(data$data)
+## to add a new column with repeated values from `fields`
+x<-rep(c("des","orbit_id","jd","cd","dist","dist_min","dist_max","v_rel","v_inf","t_sigma_f","h"),times = 1444)
+
+asteroid_df<- data_df %>%
+unnest_longer(col=1) %>%
+  add_column(x, .before = 1) %>%
+  rename(value = `data$data`) %>%
+  pivot_wider(names_from = x, values_from = value,values_fn = list) %>%
+  unnest(cols = c(des, orbit_id, jd, cd, dist, dist_min, dist_max, v_rel, v_inf, 
+    t_sigma_f, h))
+
+kable(head(asteroid_df))
+```
+Here are further explanations for variables. 
+<br/>**des** - primary designation of the asteroid or comet (e.g., 443, 2000 SG344)
+<br/>**orbit_id** - orbit ID
+<br/>**jd** - time of close-approach (JD Ephemeris Time, TDB)
+<br/>**cd** - time of close-approach (formatted calendar date/time, TDB)
+<br/>**dist** - nominal approach distance (au)
+<br/>**dist_min** - minimum (3-sigma) approach distance (au)
+<br/>**dist_max** - maximum (3-sigma) approach distance (au)
+<br/>**v_rel** - velocity relative to the approach body at close approach (km/s)
+<br/>**v_inf** - velocity relative to a massless body (km/s)
+<br/>**t_sigma_f** - 3-sigma uncertainty in the time of close-approach (formatted in days, hours, and minutes; days are not included if zero; example “13:02” is 13 hours 2 minutes; example “2_09:08” is 2 days 9 hours 8 minutes)
+<br/>**h** - absolute magnitude H (mag)
+
