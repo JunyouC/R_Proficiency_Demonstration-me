@@ -19,12 +19,27 @@ You can find the analysis [here](https://github.com/JunyouC/R_Proficiency_Demons
 </br>**1. Data wrangling**
 </br>**2. Descriptive analysis**
 </br>**3. Correlation analysis**(*pearson's r, Correlation coefficient matrix*).
-<br/>brief intro: I examined whether income level and education level have effects on domestic incidence rate and the possible impact of income and education on domestic incidence based on datasets retrieved from Victoria state, Australia. 
+<br/>**brief intro**: I examined whether income level and education level have effects on domestic incidence rate and the possible impact of income and education on domestic incidence based on datasets retrieved from Victoria state, Australia. 
 
 ## 2. Sentiment Analysis
 You can find the analysis [here](https://github.com/JunyouC/R_Proficiency_Demonstration-me/tree/main/sentiment_analysis).
 <br/>Demonstrated skills: 
 </br>**1. Finding the most Frequent words appeared in lyrics** 
-</br>**2. Worldcloud**
-</br>**3. Sentiment analysis of lyrics**
+</br>**2. Writing Functions**
+</br>**3. Iteration**
+</br>**4. Worldcloud**
+</br>**5. Sentiment analysis of lyrics**
+<br/>**brief intro**: I did frequency, sentiment and worldcloud analysis to analyze lyrics of the top 10 most popular songs and top 100 most popular songs on Spotify (yes I did them two times using different methods to extract the data). 
+<br/>
+<br/> *It should be noted that I used APIkey in R wrapper. Therefore the Rcode is only reproducible when you entered your APIkey. To get the API key you can start a account here at [musixmach](https://developer.musixmatch.com/).*
+
+## 3. Web Scraping
+You can find the analysis [here](https://github.com/JunyouC/R_Proficiency_Demonstration-me/tree/main/webscraping).
+<br/>Demonstrated skills: 
+</br>**1. Data Wranggling** 
+</br>**2. Making Use of R Wrappers**
+</br>**2. Web scraping**
+</br>**3. Geting data using API**
+<br/>**brief intro**: In this part, I mainly practiced how to use Webscrape and API to scrape informations from websites. 
+<br/> *It should be noted that I used APIkey in when extracting data using API. Therefore the Rcode is only reproducible when you entered your APIkey. To get the API key you can start a account here at [ Jet Propulsion Laboratory ](https://ssd-api.jpl.nasa.gov/doc/cad.html).*
 
